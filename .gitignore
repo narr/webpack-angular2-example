@@ -1,0 +1,17 @@
+# @ VSC
+.vscode
+.history
+# VSC @
+
+# @ OS generated files
+.DS_Store
+# OS generated files @
+
+node_modules
+*.log
+tmp
+
+typings
+coverage
+dist
+doc

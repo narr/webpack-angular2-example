@@ -1,0 +1,23 @@
+h1 {
+  font-family: Arial, Helvetica, sans-serif
+}
+
+nav ul {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  display: inline;
+}
+
+nav li.active {
+  background-color: yellow;
+}
+
+main {
+  // background: url(../assets/img/angularclass-logo.png) no-repeat;
+  background: url(~assets/img/angularclass-logo.png) no-repeat;
+}

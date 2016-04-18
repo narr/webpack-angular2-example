@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <base href="/">
+  <meta charset="utf-8">
+  <title>Wepack-Angular2-Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" type="image/x-icon" href="<%= require('assets/icon/favicon.ico') %>">
+  <style>
+    <%= require('./index.scss') %>
+  </style>
+</head>
+
+<body>
+  <my-app><span>Loading...</span></my-app>
+
+  <% if (webpackConfig.metadata.ENV === 'google-analytics') { %>
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'SITE ID', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <% } %>
+</body>
+
+</html>

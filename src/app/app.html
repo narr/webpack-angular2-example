@@ -1,0 +1,41 @@
+<header>
+  <nav>
+    <h1>Hello {{ _name }}</h1>
+    <ul>
+      <li [myRouterActive]="'active'">
+        <a [routerLink]="['Index']">Index</a>
+      </li>
+      <li my-router-active="active">
+        <a [routerLink]="['Home']">Home</a>
+      </li>
+      <li [myRouterActive]>
+        <a [routerLink]="['About']">About</a>
+      </li>
+      <!--<li my-router-active>
+        <a [routerLink]="['Index']">Index</a>
+      </li>-->
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h1>Route Start</h1>
+  <router-outlet></router-outlet>
+  <h1>Route End</h1>
+</main>
+
+<footer>
+  <div>
+    <img [src]="_angularclassLogo" width="10%">
+  </div>
+
+  <h1>My First Attribute Directive? No actually</h1>
+  <h4>Pick a highlight color</h4>
+  <div>
+    <input type="radio" name="colors" (click)="color='lightgreen'">Green
+    <input type="radio" name="colors" (click)="color='yellow'">Yellow
+    <input type="radio" name="colors" (click)="color='cyan'">Cyan
+  </div>
+  <p [myHighlight]="{ selected: color, default: 'violet' }">Highlight me!</p>
+  <p [myHighlight]="color">Highlight me too!</p>
+</footer>

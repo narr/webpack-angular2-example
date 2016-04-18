@@ -56,7 +56,11 @@ export class MyBrowserPlatformLocation extends PlatformLocation {
     if (isPresent(this._history.pushState)) {
       this._history.pushState(state, title, url);
     } else {
-      this._location.hash = url;
+      if (url === this.getBaseHrefFromDOM()) { // to modify ObjectUnsubscribedError
+        this._location.hash = '/';
+      } else {
+        this._location.hash = url;
+      }
     }
   }
 
@@ -64,7 +68,11 @@ export class MyBrowserPlatformLocation extends PlatformLocation {
     if (isPresent(this._history.replaceState)) {
       this._history.replaceState(state, title, url);
     } else {
-      this._location.hash = url;
+      if (url === this.getBaseHrefFromDOM()) {
+        this._location.hash = '/';
+      } else {
+        this._location.hash = url;
+      }
     }
   }
 

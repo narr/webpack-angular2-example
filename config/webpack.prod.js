@@ -1,15 +1,24 @@
 const helpers = require('./helpers');
+const rimraf = require('rimraf');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const ENTRY_ORDER = ['polyfills', 'vendor', 'main'];
+const IS_FOR_GITHUB_PAGE = helpers.hasProcessFlag('-my-ghp');
+const GITHUB_PAGE_PATH = '/webpack-angular2-example/';
+const BASE_URL = IS_FOR_GITHUB_PAGE ? GITHUB_PAGE_PATH : '/';
+const OUTPUT_PATH = IS_FOR_GITHUB_PAGE ? helpers.root('gh-pages') : helpers.root('dist');
+
+rimraf.sync(OUTPUT_PATH);
 
 module.exports = {
   metadata: {
-    ENV: ENV
+    ENV: ENV,
+    baseUrl: BASE_URL
   },
   devtool: 'source-map',
   context: helpers.root('src'), // for entry and output path
@@ -19,7 +28,8 @@ module.exports = {
     'main': './main.browser.ts'
   },
   output: {
-    path: helpers.root('dist'),
+    publicPath: BASE_URL,
+    path: OUTPUT_PATH,
     filename: 'js/[name].bundle.js?[chunkhash]',
     chunkFilename: 'js/[name].chunk.js?[chunkhash]'
   },
@@ -37,12 +47,24 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
+        include: [helpers.root('src/index.scss')],
+        loader: ExtractTextPlugin.extract(['css?sourceMap', 'postcss', 'sass?sourceMap'])
+      },
+      {
+        test: /\.scss$/,
+        exclude: [helpers.root('src/index.scss')],
         loaders: ['css', 'postcss', 'sass']
       },
       {
         test: /\.(ico|jpe?g|png|gif|svg|json)$/i,
         loaders: [
           'file?name=[path][name].[ext]?[hash]'
+        ]
+      },
+      {
+        test: /\.(otf|woff|woff2|ttf|eot|svg)(\?.*?)?$/i,
+        loaders: [
+          'file?name=assets/font/[name].[ext]?[hash]'
         ]
       },
       {
@@ -71,6 +93,7 @@ module.exports = {
       'ENV': JSON.stringify(ENV),
       'HMR': false
     }),
+    new ExtractTextPlugin('css/[name].bundle.css?[contenthash]'),
     new webpack.optimize.CommonsChunkPlugin({
       name: helpers.reverse(ENTRY_ORDER),
       minChunks: Infinity

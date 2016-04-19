@@ -2,16 +2,12 @@
 <html lang="en">
 
 <head>
-  <base href="/webpack-angular2-example/">
-  <!--<base href="/">-->
+  <base href="<%= webpackConfig.metadata.baseUrl %>">
   <meta charset="utf-8">
   <title>Wepack-Angular2-Example</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="shortcut icon" type="image/x-icon" href="<%= require('assets/icon/favicon.ico') %>">
-  <style>
-    <%= require('./index.scss') %>
-  </style>
 </head>
 
 <body>

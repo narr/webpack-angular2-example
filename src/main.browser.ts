@@ -1,4 +1,4 @@
-require('./index.scss');
+// require('./index.scss');
 
 import { bootstrap } from 'angular2/platform/browser';
 

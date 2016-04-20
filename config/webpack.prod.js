@@ -1,18 +1,31 @@
 const helpers = require('./helpers');
 const rimraf = require('rimraf');
-const WebpackMd5Hash = require('webpack-md5-hash');
+const Sprite = require('sprite-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const webpack = require('webpack');
+const WebpackMd5Hash = require('webpack-md5-hash');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const ENTRY_ORDER = ['polyfills', 'vendor', 'main'];
 const IS_FOR_GITHUB_PAGE = helpers.hasProcessFlag('-my-ghp');
 const GITHUB_PAGE_PATH = '/webpack-angular2-example/';
 const BASE_URL = IS_FOR_GITHUB_PAGE ? GITHUB_PAGE_PATH : '/';
-const OUTPUT_PATH = IS_FOR_GITHUB_PAGE ? helpers.root('gh-pages') : helpers.root('dist');
+const ROOT_PATH = helpers.root('src');
 
+const INDEX_SCSS_PATH = helpers.root('src/index.scss');
+const FONT_AWESOME_SCSS_PATH = helpers.root('node_modules/font-awesome/scss/font-awesome.scss');
+const ENTRY_ORDER = ['polyfills', 'vendor', 'main'];
+
+const OUTPUT_PATH = IS_FOR_GITHUB_PAGE ? helpers.root('gh-pages') : helpers.root('dist');
+const INDEX_PATH = helpers.root('src/index.html');
+const ICON_PATH = /icon/;
+const SPRITE_SRC_PATH = helpers.root('src/assets/icon/sprite');
+const SPRITE_TARGET_PATH = helpers.root('temp/icon/sprite');
+
+rimraf.sync(helpers.root('temp'));
 rimraf.sync(OUTPUT_PATH);
 
 module.exports = {
@@ -21,11 +34,19 @@ module.exports = {
     baseUrl: BASE_URL
   },
   devtool: 'source-map',
-  context: helpers.root('src'), // for entry and output path
+  context: ROOT_PATH, // for entry and output path
   entry: {
-    'polyfills': './polyfills.ts',
-    'vendor': './vendor.ts',
-    'main': './main.browser.ts'
+    polyfills: [
+      './polyfills.ts'
+    ],
+    vendor: [
+      FONT_AWESOME_SCSS_PATH,
+      './vendor.ts'
+    ],
+    main: [
+      INDEX_SCSS_PATH,
+      './main.browser.ts'
+    ]
   },
   output: {
     publicPath: BASE_URL,
@@ -35,7 +56,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.ts', '.js'],
-    root: helpers.root('src')
+    root: ROOT_PATH
   },
   module: {
     preLoaders: [
@@ -47,18 +68,37 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        include: [helpers.root('src/index.scss')],
-        loader: ExtractTextPlugin.extract(['css?sourceMap', 'postcss', 'sass?sourceMap'])
+        include: [
+          FONT_AWESOME_SCSS_PATH,
+          INDEX_SCSS_PATH
+        ],
+        loader: ExtractTextPlugin.extract(['css?sourceMap', 'postcss', 'resolve-url', 'sass?sourceMap'])
       },
       {
         test: /\.scss$/,
-        exclude: [helpers.root('src/index.scss')],
+        exclude: [
+          FONT_AWESOME_SCSS_PATH,
+          INDEX_SCSS_PATH
+        ],
         loaders: ['css', 'postcss', 'sass']
       },
       {
-        test: /\.(ico|jpe?g|png|gif|svg|json)$/i,
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        include: [
+          ICON_PATH
+        ],
         loaders: [
-          'file?name=[path][name].[ext]?[hash]'
+          'file?name=assets/icon/[name].[ext]?[hash]'
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        exclude: [
+          ICON_PATH,
+          /node_modules\/font-awesome/
+        ],
+        loaders: [
+          'file?name=assets/img/[name].[ext]?[hash]'
         ]
       },
       {
@@ -69,7 +109,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        exclude: [helpers.root('src/index.html')],
+        exclude: [INDEX_PATH],
         loaders: ['raw']
       },
       {
@@ -84,16 +124,16 @@ module.exports = {
     failOnHint: false
   },
   plugins: [
-    new WebpackMd5Hash(),
     new webpack.DefinePlugin({
       'process.env': {
-        'ENV': JSON.stringify(ENV),
-        'NODE_ENV': JSON.stringify(ENV)
+        ENV: JSON.stringify(ENV),
+        NODE_ENV: JSON.stringify(ENV)
       },
-      'ENV': JSON.stringify(ENV),
-      'HMR': false
+      ENV: JSON.stringify(ENV),
+      HMR: false
     }),
     new ExtractTextPlugin('css/[name].bundle.css?[contenthash]'),
+    new WebpackMd5Hash(),
     new webpack.optimize.CommonsChunkPlugin({
       name: helpers.reverse(ENTRY_ORDER),
       minChunks: Infinity
@@ -107,9 +147,28 @@ module.exports = {
         removeComments: true,
         collapseWhitespace: true
       },
-      template: helpers.root('src/index.html'),
+      template: INDEX_PATH,
       chunksSortMode: helpers.packageSort(ENTRY_ORDER)
     }),
+    new Sprite({
+      source: SPRITE_SRC_PATH,
+      imgPath: SPRITE_TARGET_PATH,
+      cssPath: SPRITE_TARGET_PATH,
+      prefix: 'ic',
+      spriteName: 'ics',
+      processor: 'scss',
+      bundleMode: 'multiple'
+    }),
+    new CopyWebpackPlugin(
+      [
+        { from: '../temp/icon/sprite/*.png', to: 'assets/icon', flatten: true }
+      ],
+      {
+        ignore: [
+          '.DS_Store'
+        ]
+      }
+    ),
 
     // https://github.com/webpack/docs/wiki/optimization#deduplication
     new webpack.optimize.DedupePlugin(),

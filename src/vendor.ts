@@ -1,3 +1,8 @@
+// $fa-font-path: '../node_modules/font-awesome/fonts';
+// $fa-font-path: '~font-awesome/fonts';
+// @import '~font-awesome/scss/font-awesome.scss';
+// require('font-awesome/scss/font-awesome.scss');
+
 // RxJS
 import 'rxjs/add/operator/map';
 

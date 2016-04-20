@@ -40,6 +40,6 @@ export class Home implements OnInit, OnDestroy, CanReuse, OnReuse {
   }
 
   private _submitState(value) {
-    console.log('submitState', value);
+    console.log('submitState ', value);
   }
 }

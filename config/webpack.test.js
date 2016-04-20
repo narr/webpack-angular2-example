@@ -17,17 +17,17 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loaders: ['css', 'sass']
+        loaders: ['null']
       },
       {
-        test: /\.(ico|jpe?g|png|gif|svg|json)$/i,
+        test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: [
-          'file?name=[name].[ext]?[hash]'
+          'file?name=assets/img/[name].[ext]?[hash]'
         ]
       },
       {
         test: /\.html$/,
-        loaders: ['raw']
+        loaders: ['null']
       },
       {
         test: /\.ts$/,
@@ -48,7 +48,7 @@ module.exports = {
   },
   tslint: {
     emitErrors: false,
-    failOnHint: false,
+    failOnHint: false
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -57,7 +57,7 @@ module.exports = {
         'NODE_ENV': JSON.stringify(ENV)
       },
       'ENV': JSON.stringify(ENV),
-      'HMR': false,
+      'HMR': false
     }),
   ],
 };

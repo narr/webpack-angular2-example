@@ -16,8 +16,8 @@ import { Home } from './home';
 })
 @RouteConfig([
   { path: '/', name: 'Index', component: Home, useAsDefault: true },
-  { path: '/home', name: 'Home',  component: Home },
-  { path: '/about', name: 'About', loader: () => {
+  { path: '/home/', name: 'Home',  component: Home },
+  { path: '/about/', name: 'About', loader: () => {
     return new Promise(resolve => {
       require.ensure([], require => {
         const about = require<{About: any}>('./about/about.component');

@@ -147,8 +147,8 @@ module.exports = {
         ENV: JSON.stringify(ENV),
         NODE_ENV: JSON.stringify(ENV)
       },
-      'ENV': JSON.stringify(ENV),
-      'HMR': HMR
+      ENV: JSON.stringify(ENV),
+      HMR: HMR
     }),
 
     // https://github.com/webpack/extract-text-webpack-plugin

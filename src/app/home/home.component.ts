@@ -15,21 +15,25 @@ export class Home implements OnInit, OnDestroy, CanReuse, OnReuse {
   private _localState = { value: '' };
   private _jsonSub: Subscription;
 
-  constructor(private _title: Title) {}
+  constructor(private _title: Title) { }
 
   ngOnInit() {
     console.log('hello `Home` component');
-    this._jsonSub = this._title.getData().subscribe(data => {
-      console.log(data);
-      // this.data = data
-    }, err => {
-      console.log(err);
-    });
+    if (ENV !== 'ng-html') {
+      this._jsonSub = this._title.getData().subscribe(data => {
+        console.log(data);
+        // this.data = data
+      }, err => {
+        console.log(err);
+      });
+    }
   }
 
   ngOnDestroy() {
     console.log('Home component is destoryed');
-    this._jsonSub.unsubscribe();
+    if (ENV !== 'ng-html') {
+      this._jsonSub.unsubscribe();
+    }
   }
 
   // routerCanReuse(next: ComponentInstruction, prev: ComponentInstruction) { return false; }

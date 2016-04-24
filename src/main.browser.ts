@@ -37,3 +37,23 @@ if ('development' === ENV) {
   require('angular2/core').enableProdMode();
   document.addEventListener('DOMContentLoaded', () => main());
 }
+
+// @ for IE9
+if (window && window.history && !window.history.pushState) {
+  const basePath = document.querySelector('base').getAttribute('href');
+  const pathname = window.location.pathname;
+  if (basePath !== pathname) {
+    const href = window.location.href;
+    window.location.href = href.replace(pathname, basePath);
+  }
+}
+// for IE9 @
+
+// to resolve a blink issue(active class - off and on) on ng-html
+// as removing a loading UI after 100ms
+// window.addEventListener('load', () => {
+//   setTimeout(() => {
+//     const loadlingEl = document.querySelector('.loading');
+//     loadlingEl.parentNode.removeChild(loadlingEl);
+//   }, 100);
+// });

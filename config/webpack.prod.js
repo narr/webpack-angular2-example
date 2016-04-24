@@ -4,6 +4,7 @@ const Sprite = require('sprite-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
 
 const webpack = require('webpack');
 const WebpackMd5Hash = require('webpack-md5-hash');
@@ -11,8 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const IS_FOR_GITHUB_PAGE = helpers.hasProcessFlag('-my-ghp');
-const GITHUB_PAGE_PATH = '/webpack-angular2-example/';
-const BASE_URL = IS_FOR_GITHUB_PAGE ? GITHUB_PAGE_PATH : '/';
+const BASE_URL = IS_FOR_GITHUB_PAGE ? '/webpack-angular2-example/' : '/';
 const ROOT_PATH = helpers.root('src');
 
 const INDEX_SCSS_PATH = helpers.root('src/index.scss');
@@ -25,6 +25,8 @@ const ICON_PATH = /icon/;
 const SPRITE_SRC_PATH = helpers.root('src/assets/icon/sprite');
 const SPRITE_TARGET_PATH = helpers.root('temp/icon/sprite');
 
+const IS_DEV_MODE = helpers.hasProcessFlag('-my-dev');
+
 rimraf.sync(helpers.root('temp'));
 rimraf.sync(OUTPUT_PATH);
 
@@ -34,7 +36,7 @@ module.exports = {
     baseUrl: BASE_URL
   },
   devtool: 'source-map',
-  context: ROOT_PATH, // for entry and output path
+  context: ROOT_PATH, // for entry and output path(for file loader)
   entry: {
     polyfills: [
       './polyfills.ts'
@@ -173,18 +175,50 @@ module.exports = {
     // https://github.com/webpack/docs/wiki/optimization#deduplication
     new webpack.optimize.DedupePlugin(),
 
+    IS_DEV_MODE ? f => f :
     // https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
     // https://github.com/mishoo/UglifyJS2
     new webpack.optimize.UglifyJsPlugin({
+      // mangle: false,
+      // beautify: true,
+      // comments: false
       mangle: {
         keep_fnames: true
       },
-      // beautify: true,
-      // comments: false
       compress: {
         drop_console: true
       }
-    })
+    }),
+
+    function copyHtmlTmpl() {
+      // console.log(OUTPUT_PATH);
+      const sourcePath = OUTPUT_PATH + '/index.html';
+      const targetPath = OUTPUT_PATH + '/index.tmpl';
+      var cbCalled = false;
+      var rd;
+      var wr;
+
+      function done(err) {
+        if (!cbCalled) {
+          if (err) {
+            console.log(err);
+          }
+          cbCalled = true;
+        }
+      }
+
+      this.plugin('done', stats => {
+        rd = fs.createReadStream(sourcePath);
+        rd.on('error', done);
+
+        wr = fs.createWriteStream(targetPath);
+        wr.on('error', done);
+        wr.on('close', () => {
+          done();
+        });
+        rd.pipe(wr);
+      });
+    }
     // function failOnError() {
     //   this.plugin('done', stats => {
     //     if (stats.compilation.errors && stats.compilation.errors.length) {

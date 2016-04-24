@@ -35,13 +35,13 @@ export class HighlightDirective {
   }
 
   @HostListener('mouseenter', ['$event'])
-  private onMouseEnter(event: MouseEvent) {
+  private onMouseEnter(event: MouseE) {
     // console.log(event);
     this._highlight(this._myHighlight || this._defaultColor);
   }
 
   @HostListener('mouseleave', ['$event'])
-  private onMouseLeave(event: MouseEvent) {
+  private onMouseLeave(event: MouseE) {
     this._highlight('');
   }
 

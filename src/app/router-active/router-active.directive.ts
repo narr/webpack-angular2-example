@@ -41,14 +41,20 @@ export class RouterActive implements OnInit {
   }
 
   ngOnInit() {
-    this._routerLink.changes.subscribe(() => {
-      if (this._routerLink.first) {
+    // Below way sometimes don't detect path at initial when hitting Enter on address bar.
+    // this._routerLink.changes.subscribe(() => {
+    //   if (this._routerLink.first) {
+    //     this._updateClass();
+    //     this._router.root.subscribe(() => {
+    //       this._updateClass();
+    //     });
+    //   }
+    // });
+    if (ENV !== 'ng-html') {
+      this._router.subscribe(() => {
         this._updateClass();
-        this._router.root.subscribe(() => {
-          this._updateClass();
-        });
-      }
-    });
+      });
+    }
   }
 
   private _setDefaultAttrValue(attr?: string) {

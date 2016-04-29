@@ -14,6 +14,12 @@ import {
 } from 'angular2/router';
 import { MyBrowserPlatformLocation } from './browser_platform_location';
 
+// AngularFire2
+import {
+  FIREBASE_PROVIDERS, defaultFirebase,
+  firebaseAuthConfig, AuthMethods
+} from 'angularfire2';
+
 /*
  * application_providers: providers that are global through out the application
  */
@@ -25,6 +31,11 @@ export const APPLICATION_PROVIDERS = [
   // a temporary solution for IE9 pushState
   // https://github.com/angular/angular/issues/6506
   provide(PlatformLocation, { useClass: MyBrowserPlatformLocation }),
+  ...FIREBASE_PROVIDERS,
+  defaultFirebase('https://webpack-angular2-example.firebaseio.com'),
+  firebaseAuthConfig({
+    method: AuthMethods.Popup
+  })
 ];
 
 // @ for IE9

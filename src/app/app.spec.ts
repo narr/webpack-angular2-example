@@ -12,11 +12,16 @@ import {
 
 // Load the implementations that should be tested
 import { App } from './app.component';
+import { AuthService } from './auth';
+import { FIREBASE_PROVIDERS, defaultFirebase } from 'angularfire2';
 
 describe('App', () => {
   // provide our implementations or mocks to the dependency injector
   beforeEachProviders(() => [
-    App
+    App,
+    AuthService,
+    ...FIREBASE_PROVIDERS,
+    defaultFirebase('https://webpack-angular2-example.firebaseio.com'),
   ]);
 
   it('should have a name', inject([App], app => {

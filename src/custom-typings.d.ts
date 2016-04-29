@@ -9,7 +9,7 @@ interface NodeRequire extends WebpackRequire { }
 // to build for ng-html
 // When it is built in the server environment(ng-html), Typescript MouseEvent is not recognized by
 // default so add typings for it.
-interface MouseE extends MouseEvent { }
+// interface MouseE extends MouseEvent { }
 
 // @ Webpack DefinePlugin variables
 declare var ENV: string;

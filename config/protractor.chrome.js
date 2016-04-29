@@ -28,7 +28,7 @@ exports.config = {
   onPrepare: () => {
     // https://github.com/bcaudan/jasmine-spec-reporter/blob/master/docs/protractor-configuration.md
     jasmine.getEnv().addReporter(new SpecReporter({ displayStacktrace: 'all' }));
-    // browser.ignoreSynchronization = true; // for a non-angular site
+    browser.ignoreSynchronization = true; // for a non-angular site or for async
   },
 
   capabilities: {

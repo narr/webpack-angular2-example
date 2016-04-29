@@ -1,1 +1,2 @@
+preinstall typings
 HMR does't work with IE 9

@@ -42,4 +42,11 @@
   </div>
   <p [myHighlight]="{ selected: color, default: 'violet' }">Highlight me!</p>
   <p [myHighlight]="color">Highlight me too!</p>
+  <div class="sign-in">
+    <span class="login-status">login status: {{ _loginState.login }}</span><br><br>
+    <button class="sign-in-button" (click)="_signInWithGithub()" type="button">GitHub</button>
+    <button class="sign-in-button" (click)="_signOut()" type="button">Sign Out</button>
+  </div>
 </footer>
+
+<narr-list></narr-list>

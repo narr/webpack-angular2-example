@@ -1,0 +1,9 @@
+<!--<ul #itemsEl class="items" (scroll)="_onScroll($event, itemsEl)">-->
+<ul class="items" (scroll)="_onScroll($event)">
+  <li *ngFor="#item of _items" class="item">
+    <span>{{ item }}</span>
+  </li>
+  <span class="loadingData" [class.active]="_isQuerying"
+    [style.width]="_loadingWidth">loading</span>
+    <!--[style.width]="'100px'">loading</span>-->
+</ul>

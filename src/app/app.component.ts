@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from 'angular2/core';
+import { Component, ViewEncapsulation, OnInit, Injector } from 'angular2/core';
 import { RouteConfig } from 'angular2/router';
 
 import { RouterActive } from './router-active';
@@ -14,6 +14,8 @@ import { AuthService } from './auth';
   directives: [RouterActive, HighlightDirective, List],
   pipes: [],
   providers: [AuthService],
+  // http://blog.thoughtram.io/angular/2015/06/29/shadow-dom-strategies-in-angular2.html
+  // encapsulation: ViewEncapsulation.None,
   styles: [require('./app.scss').toString()],
   template: require('./app.html')
 })

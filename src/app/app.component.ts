@@ -1,3 +1,4 @@
+// HostListener - https://angular.io/docs/ts/latest/api/core/HostListener-var.html
 import { Component, ViewEncapsulation, OnInit, Injector } from 'angular2/core';
 import { RouteConfig } from 'angular2/router';
 

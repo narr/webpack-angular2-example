@@ -1,2 +1,11 @@
+videos and docs for tutorial
+version up
+IE9 pushState issue // https://github.com/angular/angular/issues/6506
+coverage typescript src file
+Typedoc issue https://github.com/TypeStrong/typedoc/issues/193
+material-ui(>=IE11)
+w3c validation(custom attributes and tags)
+
+npm show angular2 versions
 preinstall typings
 HMR does't work with IE 9
